@@ -16,11 +16,11 @@ import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
-public class FindMeanSD extends Configured implements Tool {
+public class EuclidianDistanceFinder extends Configured implements Tool {
 
    public static void main(String[] args) throws Exception {
       FileUtils.deleteDirectory(new File(args[1]));
-      int res = ToolRunner.run(new Configuration(), new FindMeanSD(), args);
+      int res = ToolRunner.run(new Configuration(), new EuclidianDistanceFinder(), args);
       System.exit(res);
    }
 
@@ -30,11 +30,11 @@ public class FindMeanSD extends Configured implements Tool {
       Configuration conf = this.getConf();
 
       // Create job
-      Job job = Job.getInstance(conf, "Mean and Standard Deviation Job");
-      job.setJarByClass(FindMeanSD.class);
-
-      job.setMapperClass(MeanSDMapper.class);
-      job.setReducerClass(MeanSDReducer.class);
+      Job job = Job.getInstance(conf, "Euclidian distance Job");
+      job.setPartitionerClass(EuclidianPartitioner.class);
+      job.setJarByClass(EuclidianDistanceFinder.class);
+      job.setMapperClass(EuclidianMapper.class);
+      job.setReducerClass(EuclidianReducer.class);
 
       job.setOutputKeyClass(Text.class);
       job.setOutputValueClass(DoubleWritable.class);
